@@ -1,6 +1,6 @@
 <template>
   <div class="main_mobile_container">
-    <h2 style="color: steelblue;">Mobile Authenticated  | M |</h2>
+    <h2 style="color: steelblue;">ANI + VRU Authenticated  | B |</h2>
     
     <v-container fluid >
         <div class="call_features">
@@ -95,7 +95,7 @@
 import Transfer from './Transfer';
 var count;
 export default {
-    name: 'Mobile',
+    name: 'ANI+VRU',
     components: {
         Transfer
     },

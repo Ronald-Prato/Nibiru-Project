@@ -59,7 +59,7 @@
 
 <script>
 export default {
-    name: 'Mobile_Transfer',
+    name: 'Transfer',
     data: () => ({
         departments: [
                 { name: 'Loans', abbr: "L", id: 1},

@@ -1,6 +1,6 @@
 <template>
   <div class="main_mobile_container">
-    <h2 style="color: steelblue;">Mobile Authenticated  | M |</h2>
+    <h2 style="color: steelblue;">VRU Authenticated  | V |</h2>
     
     <v-container fluid >
         <div class="call_features">
@@ -9,33 +9,55 @@
             <h3 class="feature_item" >Aknowledge Statement (Try to repeat the customer's problem) *</h3>
             <v-expansion-panel style="">
                 <v-expansion-panel-content style="box-shadow: 0 1px 0 0 rgb(209, 209, 209);" >
-                    <div slot="header" class="transfer">Verification (Customer is already in Level 1)</div>
-                    <v-card style="height: 21em;">
-                        <v-card-text style="color: steelblue; padding-bottom: 0;">Ask just one for level 2</v-card-text>
-                        <v-radio-group v-model="verificated" style="padding: 1em;">
-                            <v-radio style="margin-bottom: 0;" label="Customer Service Pasword" value="1" />
-                            <span style="font-size: 12px; margin-left: 12%; width: 100%; color: tomato; margin-bottom: 1.5em;">
+                    <div slot="header" class="transfer">Verification</div>
+                    <v-card style="height: 36em;">
+
+                        <v-card-text v-if="verificated == 0" style="color: steelblue; padding-bottom: 0;">
+                            If the customer's name matches, Ask just one for level 1
+                        </v-card-text>
+                        <v-card-text v-else-if="verificated < 2" style="color: green; padding-bottom: 0;">
+                            Customer is level 1, ask 1 question more for level 2 
+                        </v-card-text>
+                        <v-card-text v-else-if="verificated >= 2" style="color: green; padding-bottom: 0;">
+                            Customer is level 2. You can make maintence in the account
+                        </v-card-text>
+                        
+                        <div style="padding: 1em;" >
+                            <v-checkbox style="height: 1.5em;" label="Customer Service Pasword" @change="check_verification" v-model="CSP" />
+                            <span style="font-size: 12px; margin-left: 12%; width: 100%; color: tomato;">
                                 Delete it if customer doesn't remember it or if is the last 4 of social
                             </span>
-                            <v-radio style="margin-bottom: 1.5em;" label="Amount of the last deposit" value="2"/>
-                            <v-radio style="margin-bottom: 0;" label="Name of Joint Owners" value="3" />
+
+                            <v-radio-group v-model="SSN_DLN" style="margin-top: 2em;" @change="check_verification">
+                                <v-radio style="margin-bottom: 10%;" label="Social Security Number" value="1" />
+                                <v-radio style="margin-bottom: 0;" label="Drivers License Number" value="2" />
+                                <!--Restar 1 al final-->
+                            </v-radio-group>
+                            
+
+
+                            <v-checkbox style="height: 1.5em;" label="Name of Joint Owners" v-model="JO" @change="check_verification"/>
                             <span style="font-size: 12px; margin-left: 12%; width: 100%; color: steelblue; margin-bottom: 1.5em;">
                                 Ask only if customer has Joint Owners <span style="color: tomato; text-decoration: underline;">NOT</span> "Beneficiary"
                             </span>
-                            <v-radio style="margin-bottom: 0;" label="Amount of the last ACH" value="4" />
+
+                            <v-checkbox label="Amount of the Deposit" v-model="LD" @change="check_verification"/>
+
+                            <v-checkbox style="height: 1.5em;" label="Amount of the last ACH" v-model="ACH" @change="check_verification"/>
                             <span style="font-size: 12px; margin-left: 12%; width: 100%; color: steelblue; margin-bottom: 1.5em;">
                                 Automatic credits and debits in the account
                             </span>
-                        </v-radio-group>
-                    </v-card>   
-                    
-                    
+                            <v-checkbox label="Amount of the Check Cleared" v-model="CC" @change="check_verification"/>
+                            
+                            
+                        </div>
+                    </v-card>         
                 </v-expansion-panel-content>
             </v-expansion-panel>
-            <h3 class="feature_item" >Self Service Options</h3>
-            <h3 class="feature_item" >Further Assistance *</h3>
-            <h3 class="feature_item" >Offer the Survey</h3>
-            <h3 class="feature_item" >Closing with the name of the Branch *</h3>
+                <h3 class="feature_item" >Self Service Options</h3>
+                <h3 class="feature_item" >Further Assistance *</h3>
+                <h3 class="feature_item" >Offer the Survey</h3>
+                <h3 class="feature_item" >Closing with the name of the Branch *</h3>
             <v-expansion-panel>
                 <v-expansion-panel-content style="box-shadow: 0 1px 0 0 rgb(209, 209, 209);" >
                     <div slot="header" class="transfer">Transfer the Call</div>
@@ -74,6 +96,7 @@
     </v-container>
     
     <div class="Hold_Tracker">
+        
         <p style="position: absolute; left: 6.5%; top: 15%; color: black; font-weight: bolder">Hold Tracker</p>
         <v-btn color="info" @click="timer_count" :disabled="disable_button">Start</v-btn>
         <v-btn color="error" @click="reset_timer">Reset</v-btn>
@@ -95,14 +118,21 @@
 import Transfer from './Transfer';
 var count;
 export default {
-    name: 'Mobile',
+    name: 'VRU',
     components: {
         Transfer
     },
     data: () => ({
         disable_button: false,
-
+        
         verificated: 0,
+        CSP: 0,
+        SSN_DLN: 0,
+        JO: 0,
+        LD: 0,
+        ACH: 0,
+        CC: 0,
+
         sub_transfered: 0,
         transfered: 0,
         value: 120,
@@ -152,7 +182,7 @@ export default {
                     this.disable_button = false;
                     
                 }
-            }, 1000);
+            }, 200);
         },
 
         reset_timer() {
@@ -162,6 +192,28 @@ export default {
             clearInterval(count);
             this.disable_button = false;
         },
+
+        checking() {
+            console.log("CSP: "+this.CSP+" SSN or DLN: "+this.SSN_DLN+" JO: "+this.JO+" LD: "+this.LD+" ACH: "+this.ACH+" CC: "+this.CC);
+        },
+        check_verification() {
+            let c_csp = 0, c_jo = 0, c_ld = 0, c_ach = 0, c_cc = 0, c_ssn_dln;
+
+            this.CSP ? c_csp = 1 : c_csp = 0 
+            this.JO ? c_jo = 1 : c_jo = 0 
+            this.LD ? c_ld = 1 : c_ld = 0
+            this.ACH ? c_ach = 1 : c_ach = 0
+            this.CC ? c_cc = 1 : c_cc = 0
+            this.SSN_DLN == 1 || this.SSN_DLN == 2 ? c_ssn_dln = 1 : c_ssn_dln = 0;
+            
+            this.verificated = c_csp + c_jo + c_ld + c_ach + c_cc + c_ssn_dln;
+            console.log(this.verificated);
+        }
+    },
+    mounted() {
+        this.minute = 2;
+        this.seconds = 60;
+        this.seconds == 60 ? this.seconds = '00' : this.seconds = 59
     }
 }
 </script>
@@ -247,5 +299,19 @@ export default {
         box-shadow: 0 4px 6px -2px #777;
         padding: 1em;
         padding-top: 2em;
+    }
+    .countdown {
+        background: white;
+        color: #009688;
+        width: 3em;
+        height: 3em;
+        border-radius: 50%;
+        position: absolute;
+        right: 10.3%;
+        margin-top: .4%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 2;
     }
 </style>

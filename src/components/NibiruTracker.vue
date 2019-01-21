@@ -7,17 +7,22 @@
     <h3 style="margin-left: 1em; margin-bottom: 0; color: white;">Choose Call Type</h3>
     <div class="main_container">
       <ul class="list">
-        <li class="list_item" v-on:click="mobile ? mobile = false : mobile = true;"><a class="list_text">Mobile Authenticated</a> <a class="letter_code">M</a> </li>
-        <li class="list_item" ><a class="list_text">ANI Authenticated</a> <a class="letter_code">A</a> </li>
-        <li class="list_item" ><a class="list_text">ANI + VRU Authenticated</a> <a class="letter_code">B</a> </li>
-        <li class="list_item" ><a class="list_text">VRU Autheticated</a> <a class="letter_code">V</a> </li>
+        <li class="list_item" v-on:click="component = 'mobile';"><a class="list_text">Mobile Authenticated</a> <a class="letter_code">M</a> </li>
+        <li class="list_item" v-on:click="component = 'ani';" ><a class="list_text">ANI Authenticated</a> <a class="letter_code">A</a> </li>
+        <li class="list_item" v-on:click="component = 'ani+vru';"><a class="list_text">ANI + VRU Authenticated</a> <a class="letter_code">B</a> </li>
+        <li class="list_item" v-on:click="component = 'vru';"><a class="list_text">VRU Autheticated</a> <a class="letter_code">V</a> </li>
         <li class="list_item" ><a class="list_text">Account not Authenticated</a> <a class="letter_code">I</a> </li>
         <li class="list_item" ><a class="list_text">No customer Info</a> <a class="letter_code">N</a> </li>
       </ul>
     
     
     
-      <Mobile v-if="mobile"/>
+      <Mobile v-if="component == 'mobile'"/>
+      <ANI v-if="component == 'ani'"/>
+      <ANI_VRU v-if="component == 'ani+vru'"/> 
+      <VRU v-if="component == 'vru'"/>
+
+      <Notes v-if="component != ''"/>
     </div>
 
     
@@ -27,16 +32,23 @@
 
 <script>
 import Mobile from './Mobile'
+import ANI from './ANI'
+import ANI_VRU from './ANI+VRU'
+import VRU from './VRU'
+import Notes from './Notes'
+
 export default {
   name: 'NibiruTracker',
   components: {
-    Mobile
+    Mobile,
+    ANI,
+    ANI_VRU,
+    VRU, 
+    Notes
   },
-  data () {
-    return {
-      mobile: 0,
-    }
-  }
+  data: () =>  ({
+    component: ""
+  })
 }
 </script>
 
