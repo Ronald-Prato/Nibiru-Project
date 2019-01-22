@@ -26,7 +26,7 @@ export default {
 * {
   margin: 0;
   padding: 0;
-  background: #1fadd1;
+  background: linear-gradient(to right, #355c7d, #6c5b7b, #c06c84);;
 }
 body {
   margin: 0;

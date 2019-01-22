@@ -1,41 +1,60 @@
 <template>
   <div class="main_mobile_container">
-    <h2 style="color: steelblue;">ANI Authenticated  | A |</h2>
+    <h2 style="color: steelblue;">Account Not Authenticated  | B |</h2>
     
     <v-container fluid >
         <div class="call_features">
-            <h3 class="feature_item" >Opening with the bank name *</h3>
+            <h3 class="feature_item" >Opening with the bank name and your name *</h3>
             <h3 class="feature_item" >Ask for the customer's name *</h3>
             <h3 class="feature_item" >Aknowledge Statement (Try to repeat the customer's problem) *</h3>
             <v-expansion-panel style="">
                 <v-expansion-panel-content style="box-shadow: 0 1px 0 0 rgb(209, 209, 209);" >
-                    <div slot="header" class="transfer">Verification (Customer is already in Level 1)</div>
-                    <v-card style="height: 21em;">
-                        <v-card-text style="color: steelblue; padding-bottom: 0;">Ask just one for level 2</v-card-text>
-                        <v-radio-group v-model="verificated" style="padding: 1em;">
-                            <v-radio style="margin-bottom: 0;" label="Customer Service Pasword" value="1" />
-                            <span style="font-size: 12px; margin-left: 12%; width: 100%; color: tomato; margin-bottom: 1.5em;">
-                                Delete it if customer doesn't remember it or if is the last 4 of social
+                    <div slot="header" class="transfer">Verification</div>
+                    <v-card style="height: 36em;">
+
+                        <v-card-text v-if="!verificated" style="color: steelblue; padding-bottom: 0;">
+                            If the customer's name matches. Ask just one for level 1
+                        </v-card-text>
+                        <v-card-text v-else-if="verificated < 2" style="color: green; padding-bottom: 0;">
+                            Customer is level 1. Ask 1 question more for level 2 
+                        </v-card-text>
+                        <v-card-text v-else-if="verificated >= 2" style="color: green; padding-bottom: 0;">
+                            Customer is level 2. You can make maintence in the account
+                        </v-card-text>
+                        
+                        <div style="padding: 1em;" >
+                            <v-checkbox style="height: 1.5em;" label="Customer Service Pasword" @change="check_verification" v-model="CSP" />
+                            <span style="font-size: 12px; margin-left: 8%; width: 100%; color: tomato;">
+                                Don't ask it if are the last 4 of social. Delete it if customer doesn't remember it
                             </span>
-                            <v-radio style="margin-bottom: 1.5em;" label="Amount of the last deposit" value="2"/>
-                            <v-radio style="margin-bottom: 0;" label="Name of Joint Owners" value="3" />
+
+                            <v-radio-group v-model="SSN_DLN" style="margin-top: 2em;" @change="check_verification">
+                                <v-radio style="margin-bottom: 10%;" label="Social Security Number" value="1" />
+                                <v-radio style="margin-bottom: 0;" label="Drivers License Number" value="2" />
+                                <!--Restar 1 al final-->
+                            </v-radio-group>
+                            
+
+
+                            <v-checkbox style="height: 1.5em;" label="Name of Joint Owners" v-model="JO" @change="check_verification"/>
                             <span style="font-size: 12px; margin-left: 12%; width: 100%; color: steelblue; margin-bottom: 1.5em;">
                                 Ask only if customer has Joint Owners <span style="color: tomato; text-decoration: underline;">NOT</span> "Beneficiary"
                             </span>
-                            <v-radio style="margin-bottom: 0;" label="Amount of the last ACH" value="4" />
+
+                            <v-checkbox label="Amount of the Deposit" v-model="LD" @change="check_verification"/>
+
+                            <v-checkbox style="height: 1.5em;" label="Amount of the last ACH" v-model="ACH" @change="check_verification"/>
                             <span style="font-size: 12px; margin-left: 12%; width: 100%; color: steelblue; margin-bottom: 1.5em;">
                                 Automatic credits and debits in the account
                             </span>
-                        </v-radio-group>
-                    </v-card>   
-                    
-                    
+                            <v-checkbox label="Amount of the Check Cleared" v-model="CC" @change="check_verification"/>
+                            
+                            
+                        </div>
+                    </v-card>         
                 </v-expansion-panel-content>
             </v-expansion-panel>
-            <h3 class="feature_item" >Self Service Options</h3>
-            <h3 class="feature_item" >Further Assistance *</h3>
-            <h3 class="feature_item" >Offer the Survey</h3>
-            <h3 class="feature_item" >Closing with the name of the Branch *</h3>
+            <h3 class="feature_item" >Self Service Options (not if is just offering the app) *</h3>
             <v-expansion-panel>
                 <v-expansion-panel-content style="box-shadow: 0 1px 0 0 rgb(209, 209, 209);" >
                     <div slot="header" class="transfer">Transfer the Call</div>
@@ -46,6 +65,10 @@
                     
                 </v-expansion-panel-content>
             </v-expansion-panel>
+            <h3 class="feature_item" >Further Assistance *</h3>
+            <h3 class="feature_item" >Offer the Survey</h3>
+            <h3 class="feature_item" >Closing with the name of the Branch *</h3>
+            
         </div>
         <div class="boolean_options">
             <v-switch id="switch_item" class="boolean_item" v-model="g"/>
@@ -53,10 +76,10 @@
             <v-switch id="switch_item" class="boolean_item" v-model="e"/>
             <v-switch id="switch_item" class="boolean_item" v-model="verificated"/>
             <v-switch id="switch_item" class="boolean_item" v-model="d"/>
-            <v-switch id="switch_item" class="boolean_item" v-model="a"/>
+            <v-switch id="switch_item" class="boolean_item" v-model="sub_transfered"/>
             <v-switch id="switch_item" class="boolean_item" v-model="c"/>
             <v-switch id="switch_item" class="boolean_item" v-model="b"/>
-            <v-switch id="switch_item" class="boolean_item" v-model="sub_transfered"/>
+            <v-switch id="switch_item" class="boolean_item" v-model="a"/>
             
             
         </div>
@@ -87,6 +110,7 @@
             {{ minute }}:{{ seconds }}
         </v-progress-circular>
     </div>
+
     <v-btn 
             color="info" 
             @click="refresh_values"
@@ -101,20 +125,28 @@
 import Transfer from './Transfer';
 var count;
 export default {
-    name: 'ANI',
+    name: 'Account_Not_Authenticated',
     components: {
         Transfer
     },
     data: () => ({
         disable_button: false,
-
+        
         verificated: 0,
+        CSP: 0,
+        SSN_DLN: 0,
+        JO: 0,
+        LD: 0,
+        ACH: 0,
+        CC: 0,
+        
+        a: 0, b: 0, c: 0, d: 0, e: 0, f: 0, g: 0,
+
         sub_transfered: 0,
         transfered: 0,
         value: 120,
         minute: 2,
         seconds: '00',
-        a: 0, b: 0, c: 0, d: 0, e: 0, f: 0, g: 0
     }),
     methods: {
         
@@ -170,6 +202,23 @@ export default {
             this.disable_button = false;
             playSound.pause();
         },
+
+        checking() {
+            console.log("CSP: "+this.CSP+" SSN or DLN: "+this.SSN_DLN+" JO: "+this.JO+" LD: "+this.LD+" ACH: "+this.ACH+" CC: "+this.CC);
+        },
+        check_verification() {
+            let c_csp = 0, c_jo = 0, c_ld = 0, c_ach = 0, c_cc = 0, c_ssn_dln;
+
+            this.CSP ? c_csp = 1 : c_csp = 0 
+            this.JO ? c_jo = 1 : c_jo = 0 
+            this.LD ? c_ld = 1 : c_ld = 0
+            this.ACH ? c_ach = 1 : c_ach = 0
+            this.CC ? c_cc = 1 : c_cc = 0
+            this.SSN_DLN == 1 || this.SSN_DLN == 2 ? c_ssn_dln = 1 : c_ssn_dln = 0;
+            
+            this.verificated = c_csp + c_jo + c_ld + c_ach + c_cc + c_ssn_dln;
+            console.log(this.verificated);
+        },
         refresh_values () {
             this.a = 0; 
             this.b = 0; 
@@ -181,6 +230,11 @@ export default {
             this.verificated = 0;
             this.sub_transfered = 0;
         }
+    },
+    mounted() {
+        this.minute = 2;
+        this.seconds = 60;
+        this.seconds == 60 ? this.seconds = '00' : this.seconds = 59
     }
 }
 </script>
@@ -191,7 +245,7 @@ export default {
         margin-top: 2em;
         background: white;
         box-shadow: 0 10px 6px -6px #777;
-        height: 85vh;
+        height: 96.6%;
         position: relative;
     }
     .call_features {

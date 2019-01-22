@@ -1,0 +1,6 @@
+{
+  "projects": {
+    "nibiru": "nibiru-project",
+    "default": "nibiru-project"
+  }
+}

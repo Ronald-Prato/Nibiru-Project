@@ -4,14 +4,15 @@
     
     <v-container fluid >
         <div class="call_features">
-            <h3 class="feature_item" >Opening with the bank name *</h3>
+            <h3 class="feature_item" >Opening with the bank name and your name *</h3>
             <h3 class="feature_item" >Ask for the customer's name *</h3>
             <h3 class="feature_item" >Aknowledge Statement (Try to repeat the customer's problem) *</h3>
             <v-expansion-panel style="">
                 <v-expansion-panel-content style="box-shadow: 0 1px 0 0 rgb(209, 209, 209);" >
                     <div slot="header" class="transfer">Verification (Customer is already in Level 1)</div>
                     <v-card style="height: 21em;">
-                        <v-card-text style="color: steelblue; padding-bottom: 0;">Ask just one for level 2</v-card-text>
+                        <v-card-text style="color: steelblue; padding-bottom: 0;" v-if="!verificated">Ask just one for level 2</v-card-text>
+                        <v-card-text style="color: green; padding-bottom: 0;" v-else>Customer on Level 2</v-card-text>
                         <v-radio-group v-model="verificated" style="padding: 1em;">
                             <v-radio style="margin-bottom: 0;" label="Customer Service Pasword" value="1" />
                             <span style="font-size: 12px; margin-left: 12%; width: 100%; color: tomato; margin-bottom: 1.5em;">
@@ -32,10 +33,7 @@
                     
                 </v-expansion-panel-content>
             </v-expansion-panel>
-            <h3 class="feature_item" >Self Service Options</h3>
-            <h3 class="feature_item" >Further Assistance *</h3>
-            <h3 class="feature_item" >Offer the Survey</h3>
-            <h3 class="feature_item" >Closing with the name of the Branch *</h3>
+            <h3 class="feature_item" >Self Service Options (not if is just offering the app) *</h3>
             <v-expansion-panel>
                 <v-expansion-panel-content style="box-shadow: 0 1px 0 0 rgb(209, 209, 209);" >
                     <div slot="header" class="transfer">Transfer the Call</div>
@@ -46,17 +44,21 @@
                     
                 </v-expansion-panel-content>
             </v-expansion-panel>
+            <h3 class="feature_item" >Further Assistance *</h3>
+            <h3 class="feature_item" >Offer the Survey</h3>
+            <h3 class="feature_item" >Closing with the name of the Branch *</h3>
+            
         </div>
         <div class="boolean_options">
-            <v-switch class="boolean_item"/>
-            <v-switch class="boolean_item"/>
-            <v-switch class="boolean_item"/>
-            <v-switch class="boolean_item" v-model="verificated"/>
-            <v-switch class="boolean_item"/>
-            <v-switch class="boolean_item"/>
-            <v-switch class="boolean_item"/>
-            <v-switch class="boolean_item"/>
-            <v-switch class="boolean_item" v-model="sub_transfered"/>
+            <v-switch id="switch_item" class="boolean_item" v-model="g"/>
+            <v-switch id="switch_item" class="boolean_item" v-model="f"/>
+            <v-switch id="switch_item" class="boolean_item" v-model="e"/>
+            <v-switch id="switch_item" class="boolean_item" v-model="verificated"/>
+            <v-switch id="switch_item" class="boolean_item" v-model="d"/>
+            <v-switch id="switch_item" class="boolean_item" v-model="sub_transfered"/>
+            <v-switch id="switch_item" class="boolean_item" v-model="c"/>
+            <v-switch id="switch_item" class="boolean_item" v-model="b"/>
+            <v-switch id="switch_item" class="boolean_item" v-model="a"/>
             
             
         </div>
@@ -87,6 +89,12 @@
             {{ minute }}:{{ seconds }}
         </v-progress-circular>
     </div>
+    <v-btn 
+            color="info" 
+            @click="refresh_values"
+            style="position: absolute; top: 50%; right: 2.8%;"
+            
+        >Reset</v-btn>
 
   </div>
 </template>
@@ -108,6 +116,8 @@ export default {
         value: 120,
         minute: 2,
         seconds: '00',
+
+        a: 0, b: 0, c: 0, d: 0, e: 0, f: 0, g: 0
     }),
     methods: {
         
@@ -156,12 +166,25 @@ export default {
         },
 
         reset_timer() {
+           
             this.value = 120;
             this.minute = 2;
             this.seconds = '00';
             clearInterval(count);
             this.disable_button = false;
+            playSound.pause();
         },
+        refresh_values () {
+            this.a = 0; 
+            this.b = 0; 
+            this.c = 0; 
+            this.d = 0; 
+            this.e = 0; 
+            this.f = 0; 
+            this.g = 0;
+            this.verificated = 0;
+            this.sub_transfered = 0;
+        }
     }
 }
 </script>
@@ -172,7 +195,7 @@ export default {
         margin-top: 2em;
         background: white;
         box-shadow: 0 10px 6px -6px #777;
-        height: calc(100% - 2em);
+        height: 96.6%;
         position: relative;
     }
     .call_features {
@@ -182,7 +205,7 @@ export default {
         flex: auto;
         margin: 0;
         padding-left: 1em;
-        background: white;
+        background: rgba(255, 255, 255, .5);
         width: 100%;
         line-height: 4.15em;
         box-shadow: 0 4px 6px -2px #777;

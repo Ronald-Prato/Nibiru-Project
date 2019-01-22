@@ -15,7 +15,7 @@
         <div v-if="department == 'Loans'">
             <v-sheet class="Loans" color="blue lighten-3" height="100%">
                 <h3 style="padding-bottom: 2%; color: rgb(8, 83, 145);">Loans (#4003) </h3>
-                <p style="color: rgb(8, 83, 145);">Full Number: 1-800-XXX-XXXX</p>
+                <p style="color: rgb(8, 83, 145);">Full Number: 1 800 239-1996</p>
                 <p style="font-weight: bolder; color: rgb(8, 83, 145);">Give this number to the customer</p>
                 <div class="Important_Info">
                     <span>If the customer is already verified do a <span style="color: tomato;">Warm Transferm.</span> Else, do a 
@@ -27,7 +27,7 @@
         <div v-if="department == 'Bank Cards'">
             <v-sheet class="Bank_Cards" color="blue lighten-3" height="100%">
                 <h3 style="padding-bottom: 2%; color: rgb(8, 83, 145);">Bank Cards (#4004) </h3>
-                <p style="color: rgb(8, 83, 145);">Full Number: 1-800-XXX-XXXX</p>
+                <p style="color: rgb(8, 83, 145);">Full Number: 1-800-239-5175</p>
                 <p style="font-weight: bolder; color: rgb(8, 83, 145);">Give this number to the customer</p>
                 <div class="Important_Info">
                     <span>If the customer is already verified do a <span style="color: tomato;">Warm Transferm.</span> Else, do a 

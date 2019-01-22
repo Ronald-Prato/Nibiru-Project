@@ -13,10 +13,10 @@
                     <v-card style="height: 36em;">
 
                         <v-card-text v-if="verificated == 0" style="color: steelblue; padding-bottom: 0;">
-                            If the customer's name matches, Ask just one for level 1
+                            If the customer's name matches. Ask just one for level 1
                         </v-card-text>
                         <v-card-text v-else-if="verificated < 2" style="color: green; padding-bottom: 0;">
-                            Customer is level 1, ask 1 question more for level 2 
+                            Customer is level 1. Ask 1 question more for level 2 
                         </v-card-text>
                         <v-card-text v-else-if="verificated >= 2" style="color: green; padding-bottom: 0;">
                             Customer is level 2. You can make maintence in the account
@@ -24,8 +24,8 @@
                         
                         <div style="padding: 1em;" >
                             <v-checkbox style="height: 1.5em;" label="Customer Service Pasword" @change="check_verification" v-model="CSP" />
-                            <span style="font-size: 12px; margin-left: 12%; width: 100%; color: tomato;">
-                                Delete it if customer doesn't remember it or if is the last 4 of social
+                            <span style="font-size: 12px; margin-left: 8%; width: 100%; color: tomato;">
+                                Don't ask it if are the last 4 of social. Delete it if customer doesn't remember it
                             </span>
 
                             <v-radio-group v-model="SSN_DLN" style="margin-top: 2em;" @change="check_verification">
@@ -70,15 +70,15 @@
             </v-expansion-panel>
         </div>
         <div class="boolean_options">
-            <v-switch class="boolean_item"/>
-            <v-switch class="boolean_item"/>
-            <v-switch class="boolean_item"/>
-            <v-switch class="boolean_item" v-model="verificated"/>
-            <v-switch class="boolean_item"/>
-            <v-switch class="boolean_item"/>
-            <v-switch class="boolean_item"/>
-            <v-switch class="boolean_item"/>
-            <v-switch class="boolean_item" v-model="sub_transfered"/>
+            <v-switch id="switch_item" class="boolean_item" v-model="g"/>
+            <v-switch id="switch_item" class="boolean_item" v-model="f"/>
+            <v-switch id="switch_item" class="boolean_item" v-model="e"/>
+            <v-switch id="switch_item" class="boolean_item" v-model="verificated"/>
+            <v-switch id="switch_item" class="boolean_item" v-model="d"/>
+            <v-switch id="switch_item" class="boolean_item" v-model="a"/>
+            <v-switch id="switch_item" class="boolean_item" v-model="c"/>
+            <v-switch id="switch_item" class="boolean_item" v-model="b"/>
+            <v-switch id="switch_item" class="boolean_item" v-model="sub_transfered"/>
             
             
         </div>
@@ -93,9 +93,9 @@
             </v-radio-group>
             
         </div>
-    </v-container>
+        </v-container>
     
-    <div class="Hold_Tracker">
+        <div class="Hold_Tracker">
         
         <p style="position: absolute; left: 6.5%; top: 15%; color: black; font-weight: bolder">Hold Tracker</p>
         <v-btn color="info" @click="timer_count" :disabled="disable_button">Start</v-btn>
@@ -109,8 +109,15 @@
         >
             {{ minute }}:{{ seconds }}
         </v-progress-circular>
-    </div>
 
+        
+    </div>
+    <v-btn 
+            color="info" 
+            @click="refresh_values"
+            style="position: absolute; top: 50%; right: 2.8%;"
+            
+        >Reset</v-btn>
   </div>
 </template>
 
@@ -132,6 +139,8 @@ export default {
         LD: 0,
         ACH: 0,
         CC: 0,
+        
+        a: 0, b: 0, c: 0, d: 0, e: 0, f: 0, g: 0,
 
         sub_transfered: 0,
         transfered: 0,
@@ -182,7 +191,7 @@ export default {
                     this.disable_button = false;
                     
                 }
-            }, 200);
+            }, 1000);
         },
 
         reset_timer() {
@@ -191,6 +200,7 @@ export default {
             this.seconds = '00';
             clearInterval(count);
             this.disable_button = false;
+            playSound.pause();
         },
 
         checking() {
@@ -208,6 +218,17 @@ export default {
             
             this.verificated = c_csp + c_jo + c_ld + c_ach + c_cc + c_ssn_dln;
             console.log(this.verificated);
+        },
+        refresh_values () {
+            this.a = 0; 
+            this.b = 0; 
+            this.c = 0; 
+            this.d = 0; 
+            this.e = 0; 
+            this.f = 0; 
+            this.g = 0;
+            this.verificated = 0;
+            this.sub_transfered = 0;
         }
     },
     mounted() {
@@ -224,7 +245,7 @@ export default {
         margin-top: 2em;
         background: white;
         box-shadow: 0 10px 6px -6px #777;
-        height: calc(100% - 2em);
+        height: 96.6%;
         position: relative;
     }
     .call_features {

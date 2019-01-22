@@ -48,15 +48,15 @@
             </v-expansion-panel>
         </div>
         <div class="boolean_options">
-            <v-switch class="boolean_item"/>
-            <v-switch class="boolean_item"/>
-            <v-switch class="boolean_item"/>
-            <v-switch class="boolean_item" v-model="verificated"/>
-            <v-switch class="boolean_item"/>
-            <v-switch class="boolean_item"/>
-            <v-switch class="boolean_item"/>
-            <v-switch class="boolean_item"/>
-            <v-switch class="boolean_item" v-model="sub_transfered"/>
+            <v-switch id="switch_item" class="boolean_item" v-model="g"/>
+            <v-switch id="switch_item" class="boolean_item" v-model="f"/>
+            <v-switch id="switch_item" class="boolean_item" v-model="e"/>
+            <v-switch id="switch_item" class="boolean_item" v-model="verificated"/>
+            <v-switch id="switch_item" class="boolean_item" v-model="d"/>
+            <v-switch id="switch_item" class="boolean_item" v-model="a"/>
+            <v-switch id="switch_item" class="boolean_item" v-model="c"/>
+            <v-switch id="switch_item" class="boolean_item" v-model="b"/>
+            <v-switch id="switch_item" class="boolean_item" v-model="sub_transfered"/>
             
             
         </div>
@@ -88,6 +88,12 @@
         </v-progress-circular>
     </div>
 
+    <v-btn 
+            color="info" 
+            @click="refresh_values"
+            style="position: absolute; top: 50%; right: 2.8%;"
+            
+        >Reset</v-btn>
   </div>
 </template>
 
@@ -108,6 +114,7 @@ export default {
         value: 120,
         minute: 2,
         seconds: '00',
+        a: 0, b: 0, c: 0, d: 0, e: 0, f: 0, g: 0
     }),
     methods: {
         
@@ -156,12 +163,25 @@ export default {
         },
 
         reset_timer() {
+            
             this.value = 120;
             this.minute = 2;
             this.seconds = '00';
             clearInterval(count);
             this.disable_button = false;
+            playSound.pause();
         },
+        refresh_values () {
+            this.a = 0; 
+            this.b = 0; 
+            this.c = 0; 
+            this.d = 0; 
+            this.e = 0; 
+            this.f = 0; 
+            this.g = 0;
+            this.verificated = 0;
+            this.sub_transfered = 0;
+        }
     }
 }
 </script>
@@ -172,7 +192,7 @@ export default {
         margin-top: 2em;
         background: white;
         box-shadow: 0 10px 6px -6px #777;
-        height: calc(100% - 2em);
+        height: 85vh;
         position: relative;
     }
     .call_features {
